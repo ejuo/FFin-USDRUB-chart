@@ -3,11 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Сравнение курса USD/RUB в мобильном приложении Freedom Bank с вечным фьючерсом USDRUBF">
+  <meta name="description" content="Внутридневное сравнение курса USD/RUB в приложении Freedom Bank с вечным фьючерсом USDRUBF">
   <meta name="theme-color" content="#07111f">
   <title>USD/RUB — Freedom Bank и USDRUBF</title>
   <link rel="stylesheet" href="./styles.css">
-  <script type="module" src="./app.js"></script>
+  <link rel="stylesheet" href="./chart.css">
+  <script defer src="./app-base.js"></script>
+  <script defer src="./app-ui.js"></script>
+  <script defer src="./app-chart.js"></script>
+  <script defer src="./app-interaction.js"></script>
+  <script defer src="./app-helpers.js"></script>
+  <script defer src="./app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#chart-title">К графику</a>
@@ -16,70 +22,132 @@
 
   <main class="shell">
     <header class="hero">
-      <div class="eyebrow"><span class="pulse"></span>Автоматическое сравнение курсов</div>
+      <div class="eyebrow"><span class="pulse"></span>Ежечасное сравнение курсов</div>
       <div class="hero-row">
         <div>
           <h1>USD/RUB</h1>
-          <p class="subtitle">Freedom Bank <span>↔</span> рынок</p>
+          <p class="subtitle">Freedom Bank <span>↔</span> USDRUBF</p>
         </div>
-        <div class="range-switch" role="group" aria-label="Период графика">
-          <button class="range-button active" type="button" data-days="14" aria-pressed="true">2 недели</button>
-          <button class="range-button" type="button" data-days="30" aria-pressed="false">Месяц</button>
+        <div class="range-panel" aria-label="Период графика">
+          <div class="range-switch" role="group">
+            <button class="range-button" type="button" data-range="24h" data-duration-hours="24" aria-pressed="false">24 часа</button>
+            <button class="range-button" type="button" data-range="7d" data-duration-hours="168" aria-pressed="false">7 дней</button>
+            <button class="range-button active" type="button" data-range="14d" data-duration-hours="336" aria-pressed="true">2 недели</button>
+            <button class="range-button" type="button" data-range="30d" data-duration-hours="720" aria-pressed="false">Месяц</button>
+            <button class="range-button" type="button" data-custom="true" aria-pressed="false">Свой период</button>
+          </div>
+          <form class="custom-range" id="custom-range" hidden>
+            <label>С<input id="range-from" type="datetime-local" required></label>
+            <label>По<input id="range-to" type="datetime-local" required></label>
+            <button type="submit">Показать</button>
+            <small>Время Алматы / Екатеринбурга, UTC+5</small>
+            <p class="range-error" id="range-error" role="alert" hidden></p>
+          </form>
         </div>
       </div>
-      <p class="intro">Покупка и продажа доллара за рубли в мобильном приложении Freedom Bank — на одном графике с дневным закрытием вечного фьючерса USDRUBF, который показывает РБК.</p>
+      <p class="intro">Сайт каждый час фиксирует курс покупки и продажи USD/RUB в мобильном приложении Freedom Bank и сопоставляет его с часовой свечой вечного фьючерса USDRUBF. Лучшие часы для покупки и продажи доллара отмечаются прямо на графике.</p>
       <div class="status" id="status" role="status" aria-live="polite"><span class="spinner"></span>Загружаю данные…</div>
     </header>
 
     <section class="metrics" aria-label="Последние значения">
-      <article class="metric"><div class="metric-label"><i class="dot buy"></i>Freedom покупает</div><strong id="metric-buy">—</strong><small id="metric-buy-meta">USD/RUB</small></article>
-      <article class="metric"><div class="metric-label"><i class="dot sell"></i>Freedom продаёт</div><strong id="metric-sell">—</strong><small id="metric-sell-meta">USD/RUB</small></article>
-      <article class="metric"><div class="metric-label"><i class="dot market"></i>USDRUBF</div><strong id="metric-market">—</strong><small id="metric-market-meta">закрытие дня</small></article>
-      <article class="metric"><div class="metric-label">Рынок к середине спреда</div><strong id="metric-delta">—</strong><small id="metric-delta-meta">нужны оба ряда</small></article>
+      <article class="metric"><div class="metric-label"><i class="dot buy"></i>Freedom покупает USD</div><strong id="metric-buy">—</strong><small id="metric-buy-meta">USD/RUB</small></article>
+      <article class="metric"><div class="metric-label"><i class="dot sell"></i>Freedom продаёт USD</div><strong id="metric-sell">—</strong><small id="metric-sell-meta">USD/RUB</small></article>
+      <article class="metric"><div class="metric-label"><i class="dot market"></i>USDRUBF</div><strong id="metric-market">—</strong><small id="metric-market-meta">часовая свеча</small></article>
+      <article class="metric"><div class="metric-label">Спред Freedom</div><strong id="metric-spread">—</strong><small id="metric-spread-meta">продажа − покупка</small></article>
+      <article class="metric accent-buy"><div class="metric-label"><i class="dot opportunity-buy"></i>Купить USD: разрыв с рынком</div><strong id="metric-buy-gap">—</strong><small id="metric-buy-gap-meta">Freedom продаёт − USDRUBF</small></article>
+      <article class="metric accent-sell"><div class="metric-label"><i class="dot opportunity-sell"></i>Продать USD: разрыв с рынком</div><strong id="metric-sell-gap">—</strong><small id="metric-sell-gap-meta">USDRUBF − Freedom покупает</small></article>
     </section>
 
     <section class="card chart-card" aria-labelledby="chart-title">
-      <div class="card-head">
-        <div><p class="kicker">Динамика</p><h2 id="chart-title">Рублей за 1 доллар</h2><p class="period" id="period">—</p></div>
+      <div class="card-head chart-head">
+        <div>
+          <p class="kicker">Внутридневная динамика</p>
+          <h2 id="chart-title">Рублей за 1 доллар</h2>
+          <p class="period" id="period">—</p>
+          <p class="availability" id="availability">—</p>
+        </div>
         <div class="legend" role="group" aria-label="Отображаемые ряды">
-          <button type="button" data-series="buy" aria-pressed="true"><i class="legend-line buy"></i>Покупка</button>
-          <button type="button" data-series="sell" aria-pressed="true"><i class="legend-line sell"></i>Продажа</button>
+          <button type="button" data-series="buy" aria-pressed="true"><i class="legend-line buy"></i>Freedom покупает</button>
+          <button type="button" data-series="sell" aria-pressed="true"><i class="legend-line sell"></i>Freedom продаёт</button>
           <button type="button" data-series="market" aria-pressed="true"><i class="legend-line market"></i>USDRUBF</button>
         </div>
       </div>
+
       <div class="chart-wrap" id="chart-wrap">
         <svg id="chart" role="img" aria-labelledby="svg-title svg-desc"></svg>
         <div class="tooltip" id="tooltip" hidden></div>
         <div class="empty" id="empty" hidden>За выбранный период данных пока нет.</div>
       </div>
-      <div class="quality-key"><span><i class="sample solid"></i>прямая пара USD/RUB</span><span><i class="sample dashed"></i>оценка через USD/KZT и RUB/KZT</span></div>
+
+      <div class="chart-key">
+        <span><i class="sample solid"></i>прямая пара USD/RUB</span>
+        <span><i class="sample dashed"></i>оценка через USD/KZT и RUB/KZT</span>
+        <span><i class="sample gap"></i>перерыв в торгах MOEX</span>
+        <span><i class="sample best-buy"></i>лучшие часы купить USD</span>
+        <span><i class="sample best-sell"></i>лучшие часы продать USD</span>
+      </div>
+
+      <section class="inspector" aria-live="polite" aria-label="Точная выбранная точка">
+        <div class="inspector-head">
+          <div><p class="kicker">Точная точка</p><h3 id="selected-time">Выберите точку на графике</h3></div>
+          <p id="selected-source">Наведите курсор или коснитесь графика</p>
+        </div>
+        <div class="inspector-grid">
+          <div><span>Freedom покупает</span><strong id="inspect-buy">—</strong></div>
+          <div><span>Freedom продаёт</span><strong id="inspect-sell">—</strong></div>
+          <div><span>USDRUBF</span><strong id="inspect-market">—</strong></div>
+          <div><span>Купить USD: разрыв</span><strong id="inspect-buy-gap">—</strong></div>
+          <div><span>Продать USD: разрыв</span><strong id="inspect-sell-gap">—</strong></div>
+          <div><span>Спред банка</span><strong id="inspect-spread">—</strong></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="opportunities" aria-label="Лучшие часы в выбранном периоде">
+      <article class="card opportunity-card buy-card">
+        <div class="opportunity-title"><div><p class="kicker">Лучше купить USD у Freedom</p><h2 id="best-buy-time">—</h2></div><strong id="best-buy-gap">—</strong></div>
+        <p id="best-buy-detail">Минимизируется разница: курс продажи Freedom минус USDRUBF.</p>
+        <ol id="best-buy-list" class="ranking"></ol>
+      </article>
+      <article class="card opportunity-card sell-card">
+        <div class="opportunity-title"><div><p class="kicker">Лучше продать USD Freedom</p><h2 id="best-sell-time">—</h2></div><strong id="best-sell-gap">—</strong></div>
+        <p id="best-sell-detail">Минимизируется разница: USDRUBF минус курс покупки Freedom.</p>
+        <ol id="best-sell-list" class="ranking"></ol>
+      </article>
     </section>
 
     <section class="details">
       <article class="card table-card">
-        <div class="card-head"><div><p class="kicker">Последние точки</p><h2>Значения по дням</h2></div><span class="stamp" id="stamp">—</span></div>
-        <div class="table-scroll"><table><thead><tr><th>Дата</th><th>Покупка</th><th>Продажа</th><th>USDRUBF</th><th>Качество</th></tr></thead><tbody id="rates-body"><tr><td colspan="5" class="placeholder">Загрузка…</td></tr></tbody></table></div>
+        <div class="card-head"><div><p class="kicker">Синхронные наблюдения</p><h2>Курс и разрывы по часам</h2></div><span class="stamp" id="stamp">—</span></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Дата и время</th><th>Freedom покупает</th><th>Freedom продаёт</th><th>USDRUBF</th><th>Купить USD</th><th>Продать USD</th><th>Качество</th></tr></thead>
+            <tbody id="rates-body"><tr><td colspan="7" class="placeholder">Загрузка…</td></tr></tbody>
+          </table>
+        </div>
       </article>
       <aside class="card method-card">
-        <p class="kicker">Как читать график</p><h2>Инструменты отличаются</h2>
-        <p>Freedom показывает реальную вилку обмена в приложении: сколько банк платит за доллар и сколько просит при продаже.</p>
-        <p>USDRUBF — вечный фьючерс Московской биржи. Он полезен как рыночный ориентир, но не является обязательным для банка курсом обмена.</p>
-        <p class="notice">Публичного архива прямой пары Freedom нет. Пунктирные участки восстановлены из USD/KZT и RUB/KZT, помечены как оценка, а пропуски не интерполируются.</p>
+        <p class="kicker">Как читать результат</p>
+        <h2>Два разных сценария</h2>
+        <p><b>Покупка USD:</b> сравнивается курс, по которому Freedom продаёт доллар, с USDRUBF. Чем меньше положительный разрыв, тем выгоднее час.</p>
+        <p><b>Продажа USD:</b> сравнивается USDRUBF с курсом, по которому Freedom покупает доллар. Чем меньше разрыв, тем выгоднее час.</p>
+        <p>USDRUBF — биржевой вечный фьючерс и ориентир рынка, а не гарантированный курс конвертации. Часовая свеча сопоставляется со снимком банковского курса, сделанным во время этого часа.</p>
+        <p class="notice">Freedom Bank не публикует фиксированный регламент изменения курса: официальный сайт сообщает лишь, что курс может меняться в течение дня. Поэтому сайт измеряет его независимо раз в час и сохраняет время «Актуально» от публичного источника прямой пары.</p>
       </aside>
     </section>
 
     <section class="card sources" aria-labelledby="sources-title">
       <div><p class="kicker">Прозрачность</p><h2 id="sources-title">Источники данных</h2></div>
       <div class="source-grid">
-        <a href="https://bankffin.kz/ru/exchange-rates" target="_blank" rel="noreferrer"><b>Freedom Bank</b><span>официальные курсы приложения</span></a>
-        <a href="https://creditbureau.kz/currency/freedom-bank/" target="_blank" rel="noreferrer"><b>CreditBureau</b><span>прямая мобильная пара USD/RUB</span></a>
-        <a href="https://www.rbc.ru/quote/ticker/338247" target="_blank" rel="noreferrer"><b>РБК Quote</b><span>страница фьючерса USDRUBF</span></a>
-        <a href="https://iss.moex.com/iss/reference/155" target="_blank" rel="noreferrer"><b>MOEX ISS</b><span>дневные свечи USDRUBF</span></a>
-        <a href="https://themoney.kz/banks/freedom-finance-bank/usd/" target="_blank" rel="noreferrer"><b>TheMoney</b><span>стартовый исторический ряд</span></a>
+        <a href="https://bankffin.kz/ru/exchange-rates" target="_blank" rel="noreferrer"><b>Freedom Bank</b><span>официальные курсы приложения и резервный кросс</span></a>
+        <a href="https://creditbureau.kz/currency/freedom-bank/" target="_blank" rel="noreferrer"><b>CreditBureau</b><span>прямая мобильная пара USD/RUB и время «Актуально»</span></a>
+        <a href="https://www.rbc.ru/quote/ticker/338247" target="_blank" rel="noreferrer"><b>РБК Quote</b><span>страница вечного фьючерса USDRUBF</span></a>
+        <a href="https://iss.moex.com/iss/reference/155" target="_blank" rel="noreferrer"><b>MOEX ISS</b><span>часовые OHLC-свечи USDRUBF</span></a>
+        <a href="https://themoney.kz/banks/freedom-finance-bank/usd/" target="_blank" rel="noreferrer"><b>TheMoney</b><span>стартовые дневные расчётные точки</span></a>
       </div>
     </section>
 
-    <footer><span>Автообновление каждые 3 часа. Не является инвестиционной рекомендацией.</span><a href="https://github.com/ejuo/now-github-starter" target="_blank" rel="noreferrer">Исходный код</a></footer>
+    <footer><span>Автосбор раз в час, хранение до 190 дней. Не является инвестиционной рекомендацией.</span><a href="https://github.com/ejuo/FFin-USDRUB-chart" target="_blank" rel="noreferrer">Исходный код</a></footer>
   </main>
 </body>
 </html>

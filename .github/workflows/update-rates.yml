@@ -2,7 +2,8 @@ name: Update exchange rates
 
 on:
   schedule:
-    - cron: "17 */3 * * *"
+    # Не в начале часа: GitHub предупреждает о пиковых задержках на :00.
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -15,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,10 +28,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Test parsers
-        run: npm test
+      - name: Test parsers and frontend syntax
+        run: npm run check
 
-      - name: Collect rates
+      - name: Collect hourly rates
         run: npm run update
 
       - name: Commit changed data
@@ -43,5 +44,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/rates.json
-          git commit -m "Update exchange rates"
-          git push
+          git commit -m "Update hourly exchange rates"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
