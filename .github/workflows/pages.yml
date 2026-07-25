@@ -23,19 +23,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: master
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
+
       - name: Validate and build
         run: |
           npm run check
           npm run build
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
