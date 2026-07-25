@@ -1,44 +1,38 @@
-const chromeHeaders = {
+const pageUrl = "https://bankffin.kz/ru/exchange-rates";
+const headers = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
-  accept: "application/json,text/plain,*/*",
-  "accept-language": "ru-RU,ru;q=0.9,en;q=0.7",
-  referer: "https://bankffin.kz/ru/exchange-rates",
-  "x-requested-with": "XMLHttpRequest"
+  accept: "text/html,application/xhtml+xml,*/*",
+  "accept-language": "ru-RU,ru;q=0.9,en;q=0.7"
 };
 
-async function probe(name, url, headers = chromeHeaders) {
-  try {
-    const response = await fetch(url, { redirect: "follow", headers });
-    const body = await response.text();
-    console.log(`\n=== ${name} ===`);
-    console.log(`status=${response.status} url=${response.url} bytes=${body.length}`);
-    console.log(`content-type=${response.headers.get("content-type")}`);
-    console.log(body.slice(0, 4000));
-  } catch (error) {
-    console.log(`\n=== ${name} ERROR ===`);
-    console.log(error.stack || error);
+const page = await (await fetch(pageUrl, { headers })).text();
+const scriptUrls = [...page.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)]
+  .map((match) => new URL(match[1], pageUrl).href)
+  .filter((url) => url.startsWith("https://bankffin.kz/build/assets/"));
+
+for (const url of scriptUrls) {
+  const body = await (await fetch(url, { headers: { ...headers, accept: "*/*", referer: pageUrl } })).text();
+  console.log(`\n=== ${url} bytes=${body.length} ===`);
+  console.log(`prefix ${body.slice(0, 1400).replace(/\s+/g, " ")}`);
+
+  const patterns = [/baseURL/ig, /axios/ig, /getRates/ig, /\/api\//ig, /api\./ig, /exchange-rates/ig];
+  const seen = new Set();
+  for (const pattern of patterns) {
+    for (const match of body.matchAll(pattern)) {
+      const start = Math.max(0, match.index - 260);
+      const end = Math.min(body.length, match.index + 520);
+      const snippet = body.slice(start, end).replace(/\s+/g, " ");
+      if (!seen.has(snippet)) {
+        seen.add(snippet);
+        console.log(`snippet ${snippet}`);
+      }
+      if (seen.size >= 25) break;
+    }
+    if (seen.size >= 25) break;
   }
+
+  const urls = [...body.matchAll(/["'`]((?:https?:\/\/|\/)[^"'`\\\s]{2,220})["'`]/g)]
+    .map((match) => match[1])
+    .filter((value) => /(?:api|exchange|rate|currency)/i.test(value));
+  [...new Set(urls)].slice(0, 50).forEach((value) => console.log(`url ${value}`));
 }
-
-await probe("Freedom official getRates", "https://bankffin.kz/exchange-rates/getRates");
-await probe("Freedom locale getRates", "https://bankffin.kz/ru/exchange-rates/getRates");
-
-const params = new URLSearchParams({
-  "iss.meta": "off",
-  "iss.only": "candles,candles.cursor",
-  "candles.columns": "begin,end,open,close,high,low,value,volume",
-  interval: "60",
-  from: "2026-07-20",
-  till: "2026-07-25",
-  start: "0"
-});
-await probe(
-  "MOEX board candles",
-  `https://iss.moex.com/iss/engines/futures/markets/forts/boards/RFUD/securities/USDRUBF/candles.json?${params}`,
-  { "user-agent": chromeHeaders["user-agent"], accept: "application/json" }
-);
-await probe(
-  "MOEX default-board candles",
-  `https://iss.moex.com/iss/engines/futures/markets/forts/securities/USDRUBF/candles.json?${params}`,
-  { "user-agent": chromeHeaders["user-agent"], accept: "application/json" }
-);
