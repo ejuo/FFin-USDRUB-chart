@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-25T06:05:00+05:00",
+  "freedom": [
+    {"date":"2026-07-11","buy":76.2058,"sell":84.0909,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":474,"usdKztSell":481,"rubKztBuy":5.72,"rubKztSell":6.22}},
+    {"date":"2026-07-12","buy":76.2058,"sell":84.0909,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":474,"usdKztSell":481,"rubKztBuy":5.72,"rubKztSell":6.22}},
+    {"date":"2026-07-13","buy":76,"sell":83.8947,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":471.2,"usdKztSell":478.2,"rubKztBuy":5.7,"rubKztSell":6.2}},
+    {"date":"2026-07-14","buy":75.3066,"sell":83.1461,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":466.6,"usdKztSell":473.6,"rubKztBuy":5.696,"rubKztSell":6.196}},
+    {"date":"2026-07-15","buy":76.7518,"sell":84.8431,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":468.8,"usdKztSell":475.8,"rubKztBuy":5.608,"rubKztSell":6.108}},
+    {"date":"2026-07-16","buy":77.4711,"sell":85.7117,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":468.7,"usdKztSell":475.7,"rubKztBuy":5.55,"rubKztSell":6.05}},
+    {"date":"2026-07-17","buy":77.6028,"sell":85.8821,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":468.1,"usdKztSell":475.1,"rubKztBuy":5.532,"rubKztSell":6.032}},
+    {"date":"2026-07-18","buy":77.6949,"sell":85.9855,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":468.5,"usdKztSell":475.5,"rubKztBuy":5.53,"rubKztSell":6.03}},
+    {"date":"2026-07-19","buy":77.6949,"sell":85.9855,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":468.5,"usdKztSell":475.5,"rubKztBuy":5.53,"rubKztSell":6.03}},
+    {"date":"2026-07-20","buy":77.6056,"sell":85.8995,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":467.38,"usdKztSell":474.38,"rubKztBuy":5.5225,"rubKztSell":6.0225}},
+    {"date":"2026-07-21","buy":77.309,"sell":85.5797,"method":"derived-cross","provider":"themoney.kz","calculation":{"usdKztBuy":465.4,"usdKztSell":472.4,"rubKztBuy":5.52,"rubKztSell":6.02}},
+    {"date":"2026-07-25","buy":75.44,"sell":80.85,"method":"direct","provider":"creditbureau.kz","capturedAt":"2026-07-25T06:05:00+05:00"}
+  ],
+  "market": []
+}
