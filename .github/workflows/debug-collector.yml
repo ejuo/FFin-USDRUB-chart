@@ -1,4 +1,4 @@
-name: Debug exchange-rate collector
+name: Validate exchange-rate collector
 
 on:
   pull_request:
@@ -12,15 +12,38 @@ permissions:
   contents: read
 
 jobs:
-  debug:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
-      - name: Clone branch and probe sources
+      - name: Clone PR branch
         shell: bash
         run: |
           set -Eeuo pipefail
           git clone --quiet --depth 1 --branch "$GITHUB_HEAD_REF" "https://github.com/$GITHUB_REPOSITORY.git" repo
-          cd repo
-          echo "Node: $(node --version)"
-          node scripts/debug-sources.mjs
+
+      - name: Run syntax checks and parser tests
+        working-directory: repo
+        run: npm run check
+
+      - name: Run live collector
+        working-directory: repo
+        run: npm run update
+
+      - name: Validate generated data
+        working-directory: repo
+        shell: bash
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const data = JSON.parse(fs.readFileSync("data/rates.json", "utf8"));
+            if (data.schemaVersion !== 2) throw new Error("schemaVersion must be 2");
+            if (!data.freedom?.length) throw new Error("Freedom observations are empty");
+            if (!data.market?.length) throw new Error("MOEX observations are empty");
+            const last = data.freedom.at(-1);
+            if (last.provider !== "bankffin.kz" || last.source !== "official-api") {
+              throw new Error(`Unexpected Freedom source: ${JSON.stringify(last)}`);
+            }
+            console.log(`Freedom ${last.buy}/${last.sell} at ${last.timestamp}`);
+            console.log(`MOEX candles: ${data.market.length}; comparisons: ${data.comparisons?.length ?? 0}`);
+          '
