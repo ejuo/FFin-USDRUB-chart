@@ -132,15 +132,15 @@
         <p><b>Покупка USD:</b> сравнивается курс, по которому Freedom продаёт доллар, с USDRUBF. Чем меньше положительный разрыв, тем выгоднее час.</p>
         <p><b>Продажа USD:</b> сравнивается USDRUBF с курсом, по которому Freedom покупает доллар. Чем меньше разрыв, тем выгоднее час.</p>
         <p>USDRUBF — биржевой вечный фьючерс и ориентир рынка, а не гарантированный курс конвертации. Часовая свеча сопоставляется со снимком банковского курса, сделанным во время этого часа.</p>
-        <p class="notice">Freedom Bank не публикует фиксированный регламент изменения курса: официальный сайт сообщает лишь, что курс может меняться в течение дня. Поэтому сайт измеряет его независимо раз в час и сохраняет время «Актуально» от публичного источника прямой пары.</p>
+        <p class="notice">Freedom Bank не публикует фиксированный регламент изменения курса, а официальный API не сообщает время последнего изменения. Поэтому сайт делает независимый замер раз в час и определяет фактические изменения по истории значений покупки и продажи.</p>
       </aside>
     </section>
 
     <section class="card sources" aria-labelledby="sources-title">
       <div><p class="kicker">Прозрачность</p><h2 id="sources-title">Источники данных</h2></div>
       <div class="source-grid">
-        <a href="https://bankffin.kz/ru/exchange-rates" target="_blank" rel="noreferrer"><b>Freedom Bank</b><span>официальные курсы приложения и резервный кросс</span></a>
-        <a href="https://creditbureau.kz/currency/freedom-bank/" target="_blank" rel="noreferrer"><b>CreditBureau</b><span>прямая мобильная пара USD/RUB и время «Актуально»</span></a>
+        <a href="https://bankffin.kz/ru/exchange-rates" target="_blank" rel="noreferrer"><b>Freedom Bank</b><span>официальная страница курсов приложения</span></a>
+        <a href="https://bankffin.kz/api/exchange-rates/getRates" target="_blank" rel="noreferrer"><b>Freedom API</b><span>прямая мобильная пара USD/RUB</span></a>
         <a href="https://www.rbc.ru/quote/ticker/338247" target="_blank" rel="noreferrer"><b>РБК Quote</b><span>страница вечного фьючерса USDRUBF</span></a>
         <a href="https://iss.moex.com/iss/reference/155" target="_blank" rel="noreferrer"><b>MOEX ISS</b><span>часовые OHLC-свечи USDRUBF</span></a>
         <a href="https://themoney.kz/banks/freedom-finance-bank/usd/" target="_blank" rel="noreferrer"><b>TheMoney</b><span>стартовые дневные расчётные точки</span></a>
