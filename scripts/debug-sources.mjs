@@ -1,31 +1,32 @@
-const url = "https://bankffin.kz/build/assets/index-d9e77457.js";
-const headers = {
+const pageUrl = "https://bankffin.kz/ru/exchange-rates";
+const apiUrl = "https://bankffin.kz/api/exchange-rates/getRates";
+const browserHeaders = {
   "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
-  accept: "*/*",
-  referer: "https://bankffin.kz/ru/exchange-rates"
+  accept: "text/html,application/xhtml+xml,*/*",
+  "accept-language": "ru-RU,ru;q=0.9,en;q=0.7"
 };
-const response = await fetch(url, { headers });
-const body = await response.text();
-console.log(`status=${response.status} bytes=${body.length}`);
-console.log(`tail ${body.slice(-7000).replace(/\s+/g, " ")}`);
 
-const regexes = [
-  /\w+\.create\s*\(/g,
-  /create\s*\(\s*\{/g,
-  /baseURL\s*:/g,
-  /withCredentials\s*:/g,
-  /export\s*\{/g,
-  /const\s+\w+\s*=\s*[^;]{0,300}create/g
-];
-const seen = new Set();
-for (const regex of regexes) {
-  for (const match of body.matchAll(regex)) {
-    const start = Math.max(0, match.index - 700);
-    const end = Math.min(body.length, match.index + 1800);
-    const snippet = body.slice(start, end).replace(/\s+/g, " ");
-    if (!seen.has(snippet)) {
-      seen.add(snippet);
-      console.log(`snippet ${snippet}`);
-    }
+const pageResponse = await fetch(pageUrl, { headers: browserHeaders });
+const page = await pageResponse.text();
+const csrf = page.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i)?.[1] || "";
+console.log(`page status=${pageResponse.status} csrf=${csrf ? "present" : "missing"}`);
+
+for (const includeCsrf of [false, true]) {
+  const headers = {
+    ...browserHeaders,
+    accept: "application/json,text/plain,*/*",
+    referer: pageUrl,
+    "x-requested-with": "XMLHttpRequest"
+  };
+  if (includeCsrf) headers["x-csrf-token"] = csrf;
+
+  const response = await fetch(apiUrl, { headers });
+  const text = await response.text();
+  console.log(`\n=== API csrf=${includeCsrf} status=${response.status} type=${response.headers.get("content-type")} bytes=${text.length} ===`);
+  try {
+    const json = JSON.parse(text);
+    console.log(JSON.stringify(json, null, 2).slice(0, 16000));
+  } catch {
+    console.log(text.slice(0, 4000));
   }
 }
