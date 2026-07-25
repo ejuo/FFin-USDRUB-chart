@@ -6,7 +6,9 @@ on:
     paths:
       - "scripts/**"
       - "data/rates.json"
-      - ".github/workflows/debug-collector.yml"
+      - ".github/workflows/**"
+      - "index.html"
+      - "README.md"
 
 permissions:
   contents: read
@@ -16,22 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Clone PR branch
-        shell: bash
-        run: |
-          set -Eeuo pipefail
-          git clone --quiet --depth 1 --branch "$GITHUB_HEAD_REF" "https://github.com/$GITHUB_REPOSITORY.git" repo
+      - name: Checkout PR
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
 
       - name: Run syntax checks and parser tests
-        working-directory: repo
         run: npm run check
 
       - name: Run live collector
-        working-directory: repo
         run: npm run update
 
       - name: Validate generated data
-        working-directory: repo
         shell: bash
         run: |
           node -e '
