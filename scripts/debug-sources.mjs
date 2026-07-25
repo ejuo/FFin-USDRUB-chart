@@ -8,17 +8,18 @@ const chromeHeaders = {
   accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
   "accept-language": "ru-RU,ru;q=0.9,en;q=0.7",
   "cache-control": "no-cache",
-  pragma: "no-cache",
-  "sec-fetch-dest": "document",
-  "sec-fetch-mode": "navigate",
-  "sec-fetch-site": "none",
-  "upgrade-insecure-requests": "1"
+  pragma: "no-cache"
 };
+
+async function fetchText(url, headers = chromeHeaders) {
+  const response = await fetch(url, { redirect: "follow", headers });
+  const body = await response.text();
+  return { response, body };
+}
 
 async function probe(name, url, headers = {}) {
   try {
-    const response = await fetch(url, { redirect: "follow", headers });
-    const body = await response.text();
+    const { response, body } = await fetchText(url, headers);
     console.log(`\n=== ${name} ===`);
     console.log(`status=${response.status} url=${response.url} bytes=${body.length}`);
     console.log(`server=${response.headers.get("server")} content-type=${response.headers.get("content-type")}`);
@@ -37,19 +38,39 @@ const cb = await probe("CreditBureau browser headers", targets.creditBureau, {
   referer: "https://creditbureau.kz/"
 });
 console.log(`CreditBureau contains USD/RUB: ${/USD\s*\/\s*RUB/i.test(cb.body)}`);
-console.log(`CreditBureau prefix: ${cb.body.slice(0, 300).replace(/\s+/g, " ")}`);
 
 const bank = await probe("Bankffin browser headers", targets.bankffin, chromeHeaders);
 console.log(`Bankffin contains mobile marker: ${/В мобильном приложении/i.test(bank.body)}`);
 console.log(`Bankffin contains USD: ${/\bUSD\b/i.test(bank.body)}`);
 
 const scriptUrls = [...bank.body.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)]
-  .map((match) => new URL(match[1], targets.bankffin).href);
-console.log(`Bankffin script count: ${scriptUrls.length}`);
-scriptUrls.slice(0, 30).forEach((url) => console.log(`script ${url}`));
+  .map((match) => new URL(match[1], targets.bankffin).href)
+  .filter((url) => url.startsWith("https://bankffin.kz/build/assets/"));
+console.log(`Bankffin local scripts: ${scriptUrls.length}`);
 
-const inlineHints = [...bank.body.matchAll(/.{0,100}(?:exchange|currency|rate|курс|api).{0,180}/gi)]
-  .slice(0, 20)
-  .map((match) => match[0].replace(/\s+/g, " "));
-console.log("Bankffin inline hints:");
-inlineHints.forEach((hint) => console.log(hint));
+for (const url of scriptUrls) {
+  const { response, body } = await fetchText(url, {
+    ...chromeHeaders,
+    accept: "*/*",
+    referer: targets.bankffin
+  });
+  console.log(`\n--- asset ${url} status=${response.status} bytes=${body.length} ---`);
+
+  const paths = [...body.matchAll(/["'`]((?:https?:\/\/|\/)[^"'`\\\s]{3,220})["'`]/g)]
+    .map((match) => match[1])
+    .filter((value) => /(?:api|exchange|currency|rate|course|convert)/i.test(value));
+  [...new Set(paths)].slice(0, 80).forEach((value) => console.log(`path ${value}`));
+
+  const snippets = [];
+  for (const pattern of [/exchange-rates/ig, /exchangeRates/ig, /currency/ig, /api\//ig, /react-app__exchange-rates/ig]) {
+    for (const match of body.matchAll(pattern)) {
+      const start = Math.max(0, match.index - 180);
+      const end = Math.min(body.length, match.index + 300);
+      const snippet = body.slice(start, end).replace(/\s+/g, " ");
+      if (!snippets.includes(snippet)) snippets.push(snippet);
+      if (snippets.length >= 30) break;
+    }
+    if (snippets.length >= 30) break;
+  }
+  snippets.slice(0, 30).forEach((snippet) => console.log(`snippet ${snippet}`));
+}
