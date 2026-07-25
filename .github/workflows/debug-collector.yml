@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [master]
     paths:
-      - "scripts/update-rates.mjs"
+      - "scripts/**"
       - "data/rates.json"
       - ".github/workflows/debug-collector.yml"
 
@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Clone branch and run collector
+      - name: Clone branch and probe sources
         shell: bash
         run: |
           set -Eeuo pipefail
           git clone --quiet --depth 1 --branch "$GITHUB_HEAD_REF" "https://github.com/$GITHUB_REPOSITORY.git" repo
           cd repo
           echo "Node: $(node --version)"
-          node scripts/update-rates.mjs
+          node scripts/debug-sources.mjs
