@@ -2,10 +2,10 @@ import { readFile, writeFile } from "node:fs/promises";
 import assert from "node:assert/strict";
 
 const DATA = new URL("../data/rates.json", import.meta.url);
-const CREDIT_BUREAU = "https://creditbureau.kz/currency/freedom-bank/";
-const BANKFFIN = "https://bankffin.kz/ru/exchange-rates";
+const BANKFFIN_PAGE = "https://bankffin.kz/ru/exchange-rates";
+const BANKFFIN_API = "https://bankffin.kz/api/exchange-rates/getRates";
 const MOEX = "https://iss.moex.com/iss/engines/futures/markets/forts/boards/RFUD/securities/USDRUBF/candles.json";
-const USER_AGENT = "ffin-usdrub-chart/2.0 (+https://github.com/ejuo/FFin-USDRUB-chart)";
+const USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36";
 const RETENTION_DAYS = 190;
 const MARKET_INTERVAL_MINUTES = 60;
 const MARKET_MAX_AGE_MINUTES = 150;
@@ -79,6 +79,32 @@ export function validateFreedom({ buy, sell }) {
   if (!Number.isFinite(buy) || !Number.isFinite(sell)) throw new Error("Курс должен быть числом");
   if (buy < 40 || buy > 150 || sell < 40 || sell > 150) throw new Error("Курс USD/RUB вне допустимого диапазона");
   if (buy >= sell) throw new Error("Курс покупки должен быть ниже курса продажи");
+}
+
+export function parseOfficialRates(payload, observedAt = new Date()) {
+  const mobile = payload?.data?.mobile;
+  if (payload?.success !== true || !Array.isArray(mobile)) {
+    throw new Error("Freedom API: некорректный ответ");
+  }
+
+  const row = mobile.find((item) => item?.buyCode === "USD" && item?.sellCode === "RUB");
+  if (!row) throw new Error("Freedom API: не найдена мобильная пара USD/RUB");
+
+  const observed = asDate(observedAt);
+  const point = {
+    timestamp: observed.toISOString(),
+    observedAt: observed.toISOString(),
+    sourceUpdatedAt: null,
+    date: almatyDate(observed),
+    buy: number(row.buyRate),
+    sell: number(row.sellRate),
+    method: "direct",
+    provider: "bankffin.kz",
+    source: "official-api",
+    resolution: "intraday"
+  };
+  validateFreedom(point);
+  return point;
 }
 
 export function parseDirect(html, observedAt = new Date()) {
@@ -281,18 +307,16 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 25_000) {
 }
 
 async function collectFreedom(observedAt) {
-  try {
-    const html = await (await fetchWithTimeout(CREDIT_BUREAU)).text();
-    const point = parseDirect(html, observedAt);
-    console.log(`Freedom direct ${point.timestamp}: ${point.buy}/${point.sell}; source ${point.sourceUpdatedAt}`);
-    return point;
-  } catch (error) {
-    console.warn(`Прямая пара недоступна: ${error.message}. Пробую официальный кросс.`);
-    const html = await (await fetchWithTimeout(BANKFFIN)).text();
-    const point = parseBankffin(html, observedAt);
-    console.log(`Freedom cross ${point.timestamp}: ${point.buy}/${point.sell}`);
-    return point;
-  }
+  const response = await fetchWithTimeout(BANKFFIN_API, {
+    headers: {
+      accept: "application/json,text/plain,*/*",
+      referer: BANKFFIN_PAGE,
+      "x-requested-with": "XMLHttpRequest"
+    }
+  });
+  const point = parseOfficialRates(await response.json(), observedAt);
+  console.log(`Freedom official API ${point.timestamp}: ${point.buy}/${point.sell}`);
+  return point;
 }
 
 function cursorTotal(payload) {
@@ -340,7 +364,7 @@ async function collectMarket(reference = new Date()) {
     collected.push(...parseMoex(payload));
     const cursor = cursorTotal(payload);
     start += rows.length;
-    if (cursor?.total !== null && start >= cursor.total) break;
+    if (cursor?.total != null && start >= cursor.total) break;
   }
 
   const points = mergeByTimestamp([], collected, RETENTION_DAYS, reference);
@@ -359,6 +383,14 @@ function selfTest() {
   assert.equal(direct.sourceUpdatedAt, "2026-07-25T06:05:00+05:00");
   assert.equal(direct.buy, 75.44);
   assert.equal(direct.sell, 80.85);
+
+  const official = parseOfficialRates({
+    success: true,
+    data: { mobile: [{ buyCode: "USD", sellCode: "RUB", buyRate: "75.44", sellRate: "80.85" }] }
+  }, observed);
+  assert.equal(official.buy, 75.44);
+  assert.equal(official.sell, 80.85);
+  assert.equal(official.provider, "bankffin.kz");
 
   const cross = parseBankffin(
     '<div>В отделении USD 460 470 RUB 5.1 5.6</div><section>В мобильном приложении Валюта Покупка Продажа USD 467 474 RUB 5.52 6.02 EUR 535 542</section>',
