@@ -1,11 +1,11 @@
 {
   "name": "usd-rub-freedom-vs-market",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Intraday Freedom Bank USD/RUB versus MOEX USDRUBF dashboard",
   "scripts": {
-    "test": "node scripts/update-rates.mjs --self-test",
+    "test": "node scripts/update-rates.mjs --self-test && node scripts/chart-ux-self-test.mjs",
     "check": "node --check app-base.js && node --check app-ui.js && node --check app-chart.js && node --check app-interaction.js && node --check app-helpers.js && node --check app.js && node --check scripts/update-rates.mjs && npm test",
     "update": "node scripts/update-rates.mjs",
     "build": "node scripts/build-site.mjs"
