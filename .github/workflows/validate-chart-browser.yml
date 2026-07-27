@@ -1,0 +1,44 @@
+name: Validate chart hover in browser
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-hover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install Playwright client
+        run: npm install --no-save --no-package-lock playwright@1.57.0
+      - name: Build site
+        run: npm run build
+      - name: Test hover in Chromium
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 -m http.server 4173 -d _site >/tmp/ffin-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          node scripts/chart-browser-test.mjs
+      - name: Upload browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chart-hover-browser
+          path: |
+            chart-hover-e2e*.png
+            chart-hover-result.json
+          if-no-files-found: ignore
