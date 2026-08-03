@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-03T19:58:05.199Z",
+  "generatedAt": "2026-08-03T21:30:02.897Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -1516,6 +1516,19 @@
     {
       "timestamp": "2026-08-03T19:57:56.535Z",
       "observedAt": "2026-08-03T19:57:56.535Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-08-04",
+      "buy": 77.67,
+      "sell": 83.4,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": false
+    },
+    {
+      "timestamp": "2026-08-03T21:29:54.668Z",
+      "observedAt": "2026-08-03T21:29:54.668Z",
       "sourceUpdatedAt": null,
       "date": "2026-08-04",
       "buy": 77.67,
@@ -29806,13 +29819,26 @@
     {
       "timestamp": "2026-08-03T19:00:00.000Z",
       "begin": "2026-08-03 22:00:00",
-      "endTimestamp": "2026-08-03T19:58:02.000Z",
+      "endTimestamp": "2026-08-03T19:59:59.000Z",
       "open": 80.83,
-      "close": 80.87,
+      "close": 80.85,
       "high": 80.87,
       "low": 80.8,
       "value": 0,
-      "volume": 2429,
+      "volume": 2431,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-08-03T20:00:00.000Z",
+      "begin": "2026-08-03 23:00:00",
+      "endTimestamp": "2026-08-03T20:59:42.000Z",
+      "open": 80.86,
+      "close": 80.88,
+      "high": 80.9,
+      "low": 80.85,
+      "value": 0,
+      "volume": 1943,
       "provider": "moex-iss",
       "resolution": "hour"
     }
@@ -30472,6 +30498,19 @@
       "buy": 77.67,
       "sell": 83.4,
       "market": 80.87,
+      "method": "direct",
+      "freedomProvider": "bankffin.kz",
+      "marketProvider": "moex-iss"
+    },
+    {
+      "timestamp": "2026-08-03T21:29:54.668Z",
+      "freedomTimestamp": "2026-08-03T21:29:54.668Z",
+      "sourceUpdatedAt": null,
+      "marketTimestamp": "2026-08-03T20:00:00.000Z",
+      "marketAgeMinutes": 89.9,
+      "buy": 77.67,
+      "sell": 83.4,
+      "market": 80.88,
       "method": "direct",
       "freedomProvider": "bankffin.kz",
       "marketProvider": "moex-iss"
