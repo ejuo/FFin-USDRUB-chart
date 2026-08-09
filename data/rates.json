@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T13:15:52.858Z",
+  "generatedAt": "2026-08-09T14:01:31.323Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -2491,6 +2491,19 @@
     {
       "timestamp": "2026-08-09T13:15:44.476Z",
       "observedAt": "2026-08-09T13:15:44.476Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-08-09",
+      "buy": 80.01,
+      "sell": 86.14,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": false
+    },
+    {
+      "timestamp": "2026-08-09T14:01:22.669Z",
+      "observedAt": "2026-08-09T14:01:22.669Z",
       "sourceUpdatedAt": null,
       "date": "2026-08-09",
       "buy": 80.01,
@@ -30924,13 +30937,26 @@
     {
       "timestamp": "2026-08-09T13:00:00.000Z",
       "begin": "2026-08-09 16:00:00",
-      "endTimestamp": "2026-08-09T13:15:21.000Z",
+      "endTimestamp": "2026-08-09T13:49:21.000Z",
       "open": 82.63,
-      "close": 82.68,
+      "close": 82.65,
       "high": 82.68,
       "low": 82.63,
       "value": 0,
-      "volume": 41,
+      "volume": 75,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-08-09T14:00:00.000Z",
+      "begin": "2026-08-09 17:00:00",
+      "endTimestamp": "2026-08-09T14:01:21.000Z",
+      "open": 82.67,
+      "close": 82.68,
+      "high": 82.68,
+      "low": 82.67,
+      "value": 0,
+      "volume": 40,
       "provider": "moex-iss",
       "resolution": "hour"
     }
@@ -32263,6 +32289,19 @@
       "sourceUpdatedAt": null,
       "marketTimestamp": "2026-08-09T13:00:00.000Z",
       "marketAgeMinutes": 15.7,
+      "buy": 80.01,
+      "sell": 86.14,
+      "market": 82.68,
+      "method": "direct",
+      "freedomProvider": "bankffin.kz",
+      "marketProvider": "moex-iss"
+    },
+    {
+      "timestamp": "2026-08-09T14:01:22.669Z",
+      "freedomTimestamp": "2026-08-09T14:01:22.669Z",
+      "sourceUpdatedAt": null,
+      "marketTimestamp": "2026-08-09T14:00:00.000Z",
+      "marketAgeMinutes": 1.4,
       "buy": 80.01,
       "sell": 86.14,
       "market": 82.68,
