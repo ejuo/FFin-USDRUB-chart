@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T17:45:10.182Z",
+  "generatedAt": "2026-08-17T18:56:58.903Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -33303,13 +33303,26 @@
     {
       "timestamp": "2026-08-17T17:00:00.000Z",
       "begin": "2026-08-17 20:00:00",
-      "endTimestamp": "2026-08-17T17:45:03.000Z",
+      "endTimestamp": "2026-08-17T17:59:59.000Z",
       "open": 85.11,
-      "close": 85.05,
+      "close": 85.04,
       "high": 85.11,
-      "low": 85.04,
+      "low": 85.03,
       "value": 0,
-      "volume": 1915,
+      "volume": 2844,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-08-17T18:00:00.000Z",
+      "begin": "2026-08-17 21:00:00",
+      "endTimestamp": "2026-08-17T18:56:42.000Z",
+      "open": 85.04,
+      "close": 85.04,
+      "high": 85.08,
+      "low": 85.03,
+      "value": 0,
+      "volume": 2061,
       "provider": "moex-iss",
       "resolution": "hour"
     }
