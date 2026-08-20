@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T03:10:15.393Z",
+  "generatedAt": "2026-08-20T03:58:33.708Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -5256,6 +5256,19 @@
       "source": "official-api",
       "resolution": "intraday",
       "changed": false
+    },
+    {
+      "timestamp": "2026-08-20T03:58:25.413Z",
+      "observedAt": "2026-08-20T03:58:25.413Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-08-20",
+      "buy": 81.52,
+      "sell": 85.5,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": true
     }
   ],
   "market": [
