@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-03T00:16:05.184Z",
+  "generatedAt": "2026-09-03T04:38:57.445Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -7622,6 +7622,19 @@
       "source": "official-api",
       "resolution": "intraday",
       "changed": false
+    },
+    {
+      "timestamp": "2026-09-03T04:38:49.649Z",
+      "observedAt": "2026-09-03T04:38:49.649Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-09-03",
+      "buy": 84.51,
+      "sell": 91.53,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": true
     }
   ],
   "market": [
@@ -37485,6 +37498,32 @@
       "volume": 2665,
       "provider": "moex-iss",
       "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-09-03T03:00:00.000Z",
+      "begin": "2026-09-03 06:00:00",
+      "endTimestamp": "2026-09-03T03:59:59.000Z",
+      "open": 87.05,
+      "close": 87.05,
+      "high": 87.05,
+      "low": 87.05,
+      "value": 0,
+      "volume": 4,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-09-03T04:00:00.000Z",
+      "begin": "2026-09-03 07:00:00",
+      "endTimestamp": "2026-09-03T04:38:41.000Z",
+      "open": 87.08,
+      "close": 87.16,
+      "high": 87.2,
+      "low": 86.83,
+      "value": 0,
+      "volume": 4436,
+      "provider": "moex-iss",
+      "resolution": "hour"
     }
   ],
   "meta": {
@@ -42133,6 +42172,19 @@
       "buy": 84.6,
       "sell": 91.63,
       "market": 87.08,
+      "method": "direct",
+      "freedomProvider": "bankffin.kz",
+      "marketProvider": "moex-iss"
+    },
+    {
+      "timestamp": "2026-09-03T04:38:49.649Z",
+      "freedomTimestamp": "2026-09-03T04:38:49.649Z",
+      "sourceUpdatedAt": null,
+      "marketTimestamp": "2026-09-03T04:00:00.000Z",
+      "marketAgeMinutes": 38.8,
+      "buy": 84.51,
+      "sell": 91.53,
+      "market": 87.16,
       "method": "direct",
       "freedomProvider": "bankffin.kz",
       "marketProvider": "moex-iss"
