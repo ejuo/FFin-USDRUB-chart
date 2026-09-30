@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T20:46:55.051Z",
+  "generatedAt": "2026-09-30T00:27:20.173Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -9628,6 +9628,19 @@
     {
       "timestamp": "2026-09-29T20:46:49.214Z",
       "observedAt": "2026-09-29T20:46:49.214Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-09-30",
+      "buy": 81.42,
+      "sell": 88.25,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": false
+    },
+    {
+      "timestamp": "2026-09-30T00:27:11.825Z",
+      "observedAt": "2026-09-30T00:27:11.825Z",
       "sourceUpdatedAt": null,
       "date": "2026-09-30",
       "buy": 81.42,
@@ -40739,13 +40752,13 @@
     {
       "timestamp": "2026-09-29T20:00:00.000Z",
       "begin": "2026-09-29 23:00:00",
-      "endTimestamp": "2026-09-29T20:46:41.000Z",
+      "endTimestamp": "2026-09-29T20:59:40.000Z",
       "open": 83.98,
-      "close": 83.98,
+      "close": 83.99,
       "high": 84.01,
       "low": 83.96,
       "value": 0,
-      "volume": 1601,
+      "volume": 1775,
       "provider": "moex-iss",
       "resolution": "hour"
     }
