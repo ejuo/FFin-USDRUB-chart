@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-17T09:21:07.978Z",
+  "generatedAt": "2026-10-17T13:43:05.579Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -10638,61 +10638,22 @@
       "source": "official-api",
       "resolution": "intraday",
       "changed": false
+    },
+    {
+      "timestamp": "2026-10-17T13:42:57.016Z",
+      "observedAt": "2026-10-17T13:42:57.016Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-10-17",
+      "buy": 80.82,
+      "sell": 87.3,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": false
     }
   ],
   "market": [
-    {
-      "timestamp": "2026-04-10T10:00:00.000Z",
-      "begin": "2026-04-10 13:00:00",
-      "endTimestamp": "2026-04-10T10:59:59.000Z",
-      "open": 77.15,
-      "close": 77.1,
-      "high": 77.23,
-      "low": 77,
-      "value": 0,
-      "volume": 8901,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-04-10T11:00:00.000Z",
-      "begin": "2026-04-10 14:00:00",
-      "endTimestamp": "2026-04-10T11:59:59.000Z",
-      "open": 77.11,
-      "close": 76.99,
-      "high": 77.11,
-      "low": 76.93,
-      "value": 0,
-      "volume": 21036,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-04-10T12:00:00.000Z",
-      "begin": "2026-04-10 15:00:00",
-      "endTimestamp": "2026-04-10T12:59:59.000Z",
-      "open": 77,
-      "close": 76.91,
-      "high": 77.02,
-      "low": 76.84,
-      "value": 0,
-      "volume": 36403,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-04-10T13:00:00.000Z",
-      "begin": "2026-04-10 16:00:00",
-      "endTimestamp": "2026-04-10T13:59:59.000Z",
-      "open": 76.9,
-      "close": 76.6,
-      "high": 76.97,
-      "low": 76.55,
-      "value": 0,
-      "volume": 47784,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
     {
       "timestamp": "2026-04-10T14:00:00.000Z",
       "begin": "2026-04-10 17:00:00",
@@ -42572,13 +42533,65 @@
     {
       "timestamp": "2026-10-17T09:00:00.000Z",
       "begin": "2026-10-17 12:00:00",
-      "endTimestamp": "2026-10-17T09:21:00.000Z",
+      "endTimestamp": "2026-10-17T09:59:59.000Z",
       "open": 83.42,
-      "close": 83.42,
+      "close": 83.4,
       "high": 83.43,
-      "low": 83.42,
+      "low": 83.35,
       "value": 0,
-      "volume": 132,
+      "volume": 1903,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-10-17T10:00:00.000Z",
+      "begin": "2026-10-17 13:00:00",
+      "endTimestamp": "2026-10-17T10:59:21.000Z",
+      "open": 83.39,
+      "close": 83.39,
+      "high": 83.42,
+      "low": 83.38,
+      "value": 0,
+      "volume": 477,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-10-17T11:00:00.000Z",
+      "begin": "2026-10-17 14:00:00",
+      "endTimestamp": "2026-10-17T11:59:59.000Z",
+      "open": 83.39,
+      "close": 83.37,
+      "high": 83.4,
+      "low": 83.36,
+      "value": 0,
+      "volume": 212,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-10-17T12:00:00.000Z",
+      "begin": "2026-10-17 15:00:00",
+      "endTimestamp": "2026-10-17T12:57:01.000Z",
+      "open": 83.37,
+      "close": 83.39,
+      "high": 83.39,
+      "low": 83.34,
+      "value": 0,
+      "volume": 281,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-10-17T13:00:00.000Z",
+      "begin": "2026-10-17 16:00:00",
+      "endTimestamp": "2026-10-17T13:42:01.000Z",
+      "open": 83.39,
+      "close": 83.41,
+      "high": 83.41,
+      "low": 83.38,
+      "value": 0,
+      "volume": 398,
       "provider": "moex-iss",
       "resolution": "hour"
     }
@@ -49023,6 +49036,19 @@
       "buy": 80.82,
       "sell": 87.3,
       "market": 83.42,
+      "method": "direct",
+      "freedomProvider": "bankffin.kz",
+      "marketProvider": "moex-iss"
+    },
+    {
+      "timestamp": "2026-10-17T13:42:57.016Z",
+      "freedomTimestamp": "2026-10-17T13:42:57.016Z",
+      "sourceUpdatedAt": null,
+      "marketTimestamp": "2026-10-17T13:00:00.000Z",
+      "marketAgeMinutes": 43,
+      "buy": 80.82,
+      "sell": 87.3,
+      "market": 83.41,
       "method": "direct",
       "freedomProvider": "bankffin.kz",
       "marketProvider": "moex-iss"
