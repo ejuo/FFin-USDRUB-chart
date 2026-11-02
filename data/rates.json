@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-02T15:51:42.163Z",
+  "generatedAt": "2026-11-02T23:30:20.099Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -11678,6 +11678,19 @@
       "source": "official-api",
       "resolution": "intraday",
       "changed": true
+    },
+    {
+      "timestamp": "2026-11-02T23:30:11.902Z",
+      "observedAt": "2026-11-02T23:30:11.902Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-11-03",
+      "buy": 78.8,
+      "sell": 85,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": false
     }
   ],
   "market": [
@@ -44327,13 +44340,78 @@
     {
       "timestamp": "2026-11-02T15:00:00.000Z",
       "begin": "2026-11-02 18:00:00",
-      "endTimestamp": "2026-11-02T15:51:21.000Z",
+      "endTimestamp": "2026-11-02T15:59:59.000Z",
       "open": 81.45,
       "close": 81.5,
       "high": 81.67,
       "low": 81.44,
       "value": 0,
-      "volume": 26629,
+      "volume": 27828,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-11-02T16:00:00.000Z",
+      "begin": "2026-11-02 19:00:00",
+      "endTimestamp": "2026-11-02T16:59:59.000Z",
+      "open": 81.49,
+      "close": 81.5,
+      "high": 81.55,
+      "low": 81.46,
+      "value": 0,
+      "volume": 7288,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-11-02T17:00:00.000Z",
+      "begin": "2026-11-02 20:00:00",
+      "endTimestamp": "2026-11-02T17:59:59.000Z",
+      "open": 81.5,
+      "close": 81.43,
+      "high": 81.5,
+      "low": 81.4,
+      "value": 0,
+      "volume": 3248,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-11-02T18:00:00.000Z",
+      "begin": "2026-11-02 21:00:00",
+      "endTimestamp": "2026-11-02T18:59:59.000Z",
+      "open": 81.43,
+      "close": 81.42,
+      "high": 81.48,
+      "low": 81.41,
+      "value": 0,
+      "volume": 2771,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-11-02T19:00:00.000Z",
+      "begin": "2026-11-02 22:00:00",
+      "endTimestamp": "2026-11-02T19:59:59.000Z",
+      "open": 81.42,
+      "close": 81.39,
+      "high": 81.47,
+      "low": 81.39,
+      "value": 0,
+      "volume": 1477,
+      "provider": "moex-iss",
+      "resolution": "hour"
+    },
+    {
+      "timestamp": "2026-11-02T20:00:00.000Z",
+      "begin": "2026-11-02 23:00:00",
+      "endTimestamp": "2026-11-02T20:59:41.000Z",
+      "open": 81.4,
+      "close": 81.43,
+      "high": 81.45,
+      "low": 81.37,
+      "value": 0,
+      "volume": 4689,
       "provider": "moex-iss",
       "resolution": "hour"
     }
