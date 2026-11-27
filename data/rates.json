@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-26T23:53:11.019Z",
+  "generatedAt": "2026-11-27T08:32:15.105Z",
   "freedom": [
     {
       "date": "2026-07-11",
@@ -12692,61 +12692,22 @@
       "source": "official-api",
       "resolution": "intraday",
       "changed": false
+    },
+    {
+      "timestamp": "2026-11-27T08:32:09.116Z",
+      "observedAt": "2026-11-27T08:32:09.116Z",
+      "sourceUpdatedAt": null,
+      "date": "2026-11-27",
+      "buy": 79.54,
+      "sell": 85.77,
+      "method": "direct",
+      "provider": "bankffin.kz",
+      "source": "official-api",
+      "resolution": "intraday",
+      "changed": true
     }
   ],
   "market": [
-    {
-      "timestamp": "2026-05-21T05:00:00.000Z",
-      "begin": "2026-05-21 08:00:00",
-      "endTimestamp": "2026-05-21T05:59:59.000Z",
-      "open": 71.46,
-      "close": 71.46,
-      "high": 71.46,
-      "low": 71.46,
-      "value": 0,
-      "volume": 10,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-05-21T06:00:00.000Z",
-      "begin": "2026-05-21 09:00:00",
-      "endTimestamp": "2026-05-21T06:59:59.000Z",
-      "open": 71.46,
-      "close": 71.27,
-      "high": 71.82,
-      "low": 71.24,
-      "value": 0,
-      "volume": 58665,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-05-21T07:00:00.000Z",
-      "begin": "2026-05-21 10:00:00",
-      "endTimestamp": "2026-05-21T07:59:59.000Z",
-      "open": 71.27,
-      "close": 70.88,
-      "high": 71.36,
-      "low": 70.77,
-      "value": 0,
-      "volume": 64406,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
-    {
-      "timestamp": "2026-05-21T08:00:00.000Z",
-      "begin": "2026-05-21 11:00:00",
-      "endTimestamp": "2026-05-21T08:59:59.000Z",
-      "open": 70.88,
-      "close": 70.95,
-      "high": 71.14,
-      "low": 70.87,
-      "value": 0,
-      "volume": 24287,
-      "provider": "moex-iss",
-      "resolution": "hour"
-    },
     {
       "timestamp": "2026-05-21T09:00:00.000Z",
       "begin": "2026-05-21 12:00:00",
